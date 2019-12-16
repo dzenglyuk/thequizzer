@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
@@ -18,9 +18,9 @@ const userSchema = new Schema({
   createdSurveys: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Survey"
+      ref: 'Survey'
     }
   ]
 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model('User', userSchema);

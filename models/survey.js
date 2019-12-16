@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
@@ -13,8 +13,20 @@ const surveySchema = new Schema({
   },
   author: {
     type: Schema.Types.ObjectId,
-    ref: "User"
-  }
+    ref: 'User',
+    required: true
+  },
+  questions: [
+    {
+        type: String
+    }
+  ],
+  attempts:[
+    {
+        type: Schema.Types.ObjectId,
+        ref: 'Attempt'
+    }
+  ]
 });
 
-module.exports = mongoose.model("Survey", surveySchema);
+module.exports = mongoose.model('Survey', surveySchema);
