@@ -27,6 +27,12 @@ type User {
     createdSurveys: [Survey!]
 }
 
+type AuthData {
+    userId: ID!
+    token: String!
+    tokenExpiration: Int!
+}
+
 input AttemptInput {
     survey: String!
     user: String
@@ -51,6 +57,7 @@ input UserInput {
 type RootQuery {
     surveys: [Survey!]
     attempts: [Attempt!]
+    login(email: String!, password: String!): AuthData!
 }
 
 type RootMutation {

@@ -14,18 +14,21 @@ module.exports = {
       throw err;
     }
   },
-  createSurvey: async args => {
+  createSurvey: async (args, req) => {
+    if (!req.isAuth) {
+        throw new Error('Unauthenticated');
+    }
     const survey = new Survey({
       title: args.surveyInput.title,
       description: args.surveyInput.description,
-      author: "5dcd3714b1ee056eb0c806a8",
+      author: req.userId,
       questions: args.surveyInput.questions
     });
     let createdSurvey;
     try {
       const result = await survey.save();
       createdSurvey = transformSurvey(result);
-      const author = await User.findById("5dcd3714b1ee056eb0c806a8");
+      const author = await User.findById(req.userId);
       if (!author) {
         throw new Error("No such user");
       }
@@ -37,7 +40,10 @@ module.exports = {
       throw err;
     }
   },
-  deleteSurvey: async args => {
+  deleteSurvey: async (args, req) => {
+    if (!req.isAuth) {
+        throw new Error('Unauthenticated');
+    }
     try {
       // Should be fixed
       await Survey.deleteOne({ _id: args.surveyId });

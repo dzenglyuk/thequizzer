@@ -3,7 +3,10 @@ const Survey = require("../../models/survey");
 const { transformAttempt } = require("./merge");
 
 module.exports = {
-  attempts: async () => {
+  attempts: async (args, req) => {
+    if (!req.isAuth) {
+        throw new Error('Unauthenticated');
+    }
     try {
       const attempts = await Attempt.find();
       return attempts.map(attempt => {
@@ -13,7 +16,7 @@ module.exports = {
       throw err;
     }
   },
-  makeAttempt: async args => {
+  makeAttempt: async (args, req) => {
     const fetchedSurvey = await Survey.findOne({
       _id: args.attemptInput.survey
     });
@@ -21,7 +24,7 @@ module.exports = {
       throw new Error("No such survey");
     }
     const attempt = new Attempt({
-      user: "5dcd3714b1ee056eb0c806a8",
+      user: req.userId | 'Anonymous',
       survey: fetchedSurvey,
       answers: args.attemptInput.answers
     });
