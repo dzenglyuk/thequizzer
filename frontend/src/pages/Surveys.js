@@ -7,8 +7,16 @@ import "./Surveys.css";
 class SurveysPage extends Component {
   state = {
     creating: false,
-    questionsNumber: 1
+    questionsNumber: 1,
+    values: [''],
+    types: ['bool']
   };
+
+  constructor(props) {
+    super(props);
+    this.titleElRef = React.createRef();
+    this.descriptionElRef = React.createRef();
+  }
 
   startCreateSurveyHandler = () => {
     this.setState({creating: true});
@@ -16,6 +24,19 @@ class SurveysPage extends Component {
 
   modalConfirmHandler = () => {
     this.setState({creating: false});
+    const title = this.titleElRef.current.value;
+    const description = this.descriptionElRef.current.value;
+    let questions = [];
+    for (let idx in this.state.values) {
+      questions[idx] = {questionValue: this.state.values, questionType: this.state.types[idx]};
+    }
+        
+    if (title.trim().length === 0 || description.trim().length === 0 || questions.length === 0) {
+      return;
+    }
+
+    const survey = {title, description, questions};
+    console.log(survey);
   };
 
   modalCancelHandler = () => {
@@ -24,7 +45,27 @@ class SurveysPage extends Component {
 
   questionNumberHandler = event => {
     this.setState({questionsNumber: Number(event.target.value)});
+    let defaultTypes = [];
+    for (let i = 0; i < event.target.value; i++) {
+      defaultTypes = [...defaultTypes, this.state.types[i] || 'bool'];
+    }
+    this.setState({types: defaultTypes});
     this.forceUpdate();
+  };
+  
+  questionValuesHandler = (event) => {
+    let num = event.target.name-1;
+    let name = event.target.type === 'text' ? 'values' : 'types';
+    let newValue = event.target.value;
+    let newValues;
+    if (num >= this.state[name].length) {
+      newValues = [...this.state[name], newValue];
+    } else {
+      newValues = this.state[name].map((oldValue, idx) => {
+      return idx === num ? newValue : oldValue;
+      });
+    }
+    this.setState({[name]: newValues});
   };
   
   render() {
@@ -36,12 +77,12 @@ class SurveysPage extends Component {
           <div className="question-input" key={i}>
             <h4> {"Question " + i} </h4>
             <div className="form-control">
-              <label htmlFor="question"> Question </label>
-              <input type="text" id="question"></input>
+              <label htmlFor={"question-" + i}> Question </label>
+              <input type="text" id={"question-" + i} name={i} onChange={this.questionValuesHandler}></input>
             </div>
             <div className="form-control">
               <label htmlFor={"answer-type-" + i}> Type </label>
-              <select id={"answer-type-" + i}>
+              <select id={"answer-type-" + i} name={i} onChange={this.questionValuesHandler} defaultValue={this.state.defaultType}>
                 <option value="bool">Yes/No</option>
                 <option value="open">Answer</option>
                 <option value="range">Range</option>
@@ -62,11 +103,11 @@ class SurveysPage extends Component {
               <h3> General information: </h3>
               <div className="form-control">
                 <label htmlFor="title"> Title </label>
-                <input type="text" id="title"></input>
+                <input type="text" id="title" ref={this.titleElRef}></input>
               </div>
               <div className="form-control">
                 <label htmlFor="description"> Description </label>
-                <textarea id="description" rows="4"></textarea>
+                <textarea id="description" rows="4" ref={this.descriptionElRef}></textarea>
               </div>
               <h3> Questions: </h3>
               <div className="form-control">
