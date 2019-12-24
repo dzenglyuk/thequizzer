@@ -10,12 +10,17 @@ type Attempt {
     answers: [String!]
 }
 
+type Question {
+    questionValue: String!
+    questionType: String!
+}
+
 type Survey {
     _id: ID!
     title: String!
     description: String
     author: User!
-    questions: [String]!
+    questions: [Question!]!
     attempts: [Attempt!]
 }
 
@@ -41,11 +46,15 @@ input AttemptInput {
     answers: [String!]
 }
 
+input QuestionInput {
+    values: [String!]
+    types: [String!]
+}
+
 input SurveyInput {
     title: String!
     description: String
     author: String
-    questions: [String!]
 }
 
 input UserInput {
@@ -61,7 +70,7 @@ type RootQuery {
 }
 
 type RootMutation {
-    createSurvey(surveyInput: SurveyInput): Survey
+    createSurvey(surveyInput: SurveyInput!, questionInput: QuestionInput!): Survey
     deleteSurvey(surveyId: String!): Survey
     createUser(userInput: UserInput): User
     makeAttempt(attemptInput: AttemptInput): Attempt

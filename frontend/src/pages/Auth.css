@@ -1,0 +1,14 @@
+.auth_form {
+    width: 25rem;
+    max-width: 80%;
+    margin: 10rem auto;
+    padding: 45px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    background: #FFFFFF;
+}
+
+.auth__link {
+    color: #27ae60;
+    cursor: pointer;
+}

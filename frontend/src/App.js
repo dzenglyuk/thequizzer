@@ -1,28 +1,39 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
+import React, { Component } from "react";
+import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
-import AuthPage from './pages/Auth';
-import SurveysPage from './pages/Surveys';
-import AttemptsPage from './pages/Attempts';
-import MainNavigation from './components/Navigation/MainNavigation';
-import SideDrawer from './components/SideDrawer/SideDrawer';
-import BackDrop from './components/Backdrop/Backdrop';
+import AuthPage from "./pages/Auth";
+import SurveysPage from "./pages/Surveys";
+import AttemptsPage from "./pages/Attempts";
+import MainNavigation from "./components/Navigation/MainNavigation";
+import SideDrawer from "./components/SideDrawer/SideDrawer";
+import BackDrop from "./components/Backdrop/Backdrop";
+import AuthContext from "./context/auth-context";
 
-import './App.css';
+import "./App.css";
 
 class App extends Component {
   state = {
+    token: null,
+    userId: null,
     sideDrawerOpened: false
   };
 
+  login = (token, userId, tokenExpiration) => {
+    this.setState({ token: token, userId: userId });
+  };
+
+  logout = () => {
+    this.setState({ token: null, userId: null });
+  };
+
   drawerToggleClickHandler = () => {
-    this.setState((prevState) => {
-      return {sideDrawerOpened: !prevState.sideDrawerOpened};
+    this.setState(prevState => {
+      return { sideDrawerOpened: !prevState.sideDrawerOpened };
     });
   };
-  
+
   backdropClickHandler = () => {
-    this.setState({sideDrawerOpened: false});
+    this.setState({ sideDrawerOpened: false });
   };
 
   render() {
@@ -30,21 +41,43 @@ class App extends Component {
     if (this.state.sideDrawerOpened) {
       backDrop = <BackDrop click={this.backdropClickHandler} />;
     }
+
     return (
       <BrowserRouter>
-      <React.Fragment>
-        <MainNavigation drawerClickHandler={this.drawerToggleClickHandler} />
-        <SideDrawer show={this.state.sideDrawerOpened}/>
-        {backDrop}
-        <main className="main-content">
-          <Switch>  
-            <Redirect from="/" to='/auth' exact />
-            <Route path="/auth" component={AuthPage} />
-            <Route path="/surveys" component={SurveysPage} />
-            <Route path="/attempts" component={AttemptsPage} />
-          </Switch>
-          </main>
-      </React.Fragment>
+        <React.Fragment>
+          <AuthContext.Provider
+            value={{
+              token: this.state.token,
+              userId: this.state.userId,
+              login: this.login,
+              logout: this.logout
+            }}
+          >
+            <MainNavigation
+              drawerClickHandler={this.drawerToggleClickHandler}
+            />
+            <SideDrawer show={this.state.sideDrawerOpened} />
+            {backDrop}
+            <main className="main-content">
+              <Switch>
+                {!this.state.token && <Redirect from="/" to="/auth" exact />}
+                {!this.state.token && <Redirect from="/surveys" to="/auth" />}
+                {!this.state.token && <Redirect from="/attempts" to="/auth" />}
+                {this.state.token && <Redirect from="/" to="/surveys" exact />}
+                {this.state.token && <Redirect from="/auth" to="/surveys" exact />}
+                {!this.state.token && (
+                  <Route path="/auth" component={AuthPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/surveys" component={SurveysPage} />
+                )}
+                {this.state.token && (
+                  <Route path="/attempts" component={AttemptsPage} />
+                )}
+              </Switch>
+            </main>
+          </AuthContext.Provider>
+        </React.Fragment>
       </BrowserRouter>
     );
   }

@@ -1,0 +1,47 @@
+.modal {
+  width: 90%;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  position: fixed;
+  top: 10vh;
+  left: 5%;
+  z-index: 200;
+  margin-bottom: 100px;
+  /* overflow-y: auto; */
+}
+
+.modal__header {
+  padding: 1rem;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: #4caf50;
+  color: whitesmoke;
+}
+
+.modal__header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.modal__body {
+  overflow-y: auto;
+  max-height: calc(100vh - 210px);
+}
+
+.modal__content {
+  padding: 1rem;
+}
+
+.modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+
+@media (min-width: 768px) {
+  .modal {
+    width: 50rem;
+    left: calc((100% - 50rem) / 2);
+  }
+}

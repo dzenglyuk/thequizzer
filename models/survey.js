@@ -18,7 +18,8 @@ const surveySchema = new Schema({
   },
   questions: [
     {
-        type: String
+      questionValue: String,
+      questionType: String
     }
   ],
   attempts:[
