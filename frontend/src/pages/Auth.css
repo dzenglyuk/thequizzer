@@ -12,3 +12,8 @@
     color: #27ae60;
     cursor: pointer;
 }
+
+.auth__error {
+    color: red;
+    
+}

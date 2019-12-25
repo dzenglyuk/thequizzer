@@ -13,7 +13,7 @@ const SideDrawer = props => {
     <AuthContext.Consumer>
       {context => {
         return (
-          <nav className={drawerClasses}>
+          <nav className={drawerClasses} onClick={props.click}>
             <ul>
               {context.token && (
                 <>

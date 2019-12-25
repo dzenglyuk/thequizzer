@@ -35,6 +35,7 @@ type User {
 type AuthData {
     userId: ID!
     token: String!
+    username: String!
     tokenExpiration: Int!
 }
 
@@ -65,6 +66,7 @@ input UserInput {
 
 type RootQuery {
     surveys: [Survey!]
+    survey(surveyId: String!): Survey!
     attempts: [Attempt!]
     login(email: String!, password: String!): AuthData!
 }

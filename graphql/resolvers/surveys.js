@@ -4,7 +4,7 @@ const User = require("../../models/user");
 const { transformSurvey } = require("./merge");
 
 module.exports = {
-  surveys: async () => {
+  surveys: async (args, req) => {
     if (!req.isAuth) {
       throw new Error('Unauthenticated');
     }
@@ -13,6 +13,14 @@ module.exports = {
       return surveys.map(survey => {
         return transformSurvey(survey);
       });
+    } catch (err) {
+      throw err;
+    }
+  },
+  survey: async (args, req) => {
+    try {
+      const survey = await Survey.findById(args.surveyId);
+      return transformSurvey(survey);
     } catch (err) {
       throw err;
     }
@@ -29,7 +37,6 @@ module.exports = {
       title: args.surveyInput.title,
       description: args.surveyInput.description,
       author: req.userId,
-      // author: "5dcd3714b1ee056eb0c806a8",
       questions: questions
     });
     let createdSurvey;
@@ -37,7 +44,6 @@ module.exports = {
       const result = await survey.save();
       createdSurvey = transformSurvey(result);
       const author = await User.findById(req.userId);
-      // const author = await User.findById("5dcd3714b1ee056eb0c806a8");
       if (!author) {
         throw new Error("No such user");
       }

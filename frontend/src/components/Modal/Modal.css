@@ -29,6 +29,10 @@
   max-height: calc(100vh - 210px);
 }
 
+.modal__body button {
+    margin: 0 1rem;
+}
+
 .modal__content {
   padding: 1rem;
 }

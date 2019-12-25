@@ -1,0 +1,37 @@
+
+.survey__list-item {
+    width: 40rem;
+    max-width: 90%;
+    margin: 1rem auto;
+    padding: 20px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.24);
+    background: #FFFFFF;
+    display: flex;
+    justify-content: space-between;
+}
+ 
+.list-item__info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.list-item__actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+.survey__list-item h1,
+.survey__list-item h3 {
+    margin: 0.3rem 0;
+}
+
+.survey__list-item h1 {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.list-item__actions button {
+    /* margin: 0.3rem 0; */
+    width: 140px;
+}

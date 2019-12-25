@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 
 import AuthPage from "./pages/Auth";
+import FormPage from "./pages/Form";
 import SurveysPage from "./pages/Surveys";
 import AttemptsPage from "./pages/Attempts";
 import MainNavigation from "./components/Navigation/MainNavigation";
@@ -15,15 +16,16 @@ class App extends Component {
   state = {
     token: null,
     userId: null,
+    username: null,
     sideDrawerOpened: false
   };
 
-  login = (token, userId, tokenExpiration) => {
-    this.setState({ token: token, userId: userId });
+  login = (token, userId, username, tokenExpiration) => {
+    this.setState({ token: token, userId: userId, username: username });
   };
 
   logout = () => {
-    this.setState({ token: null, userId: null });
+    this.setState({ token: null, userId: null, username: null });
   };
 
   drawerToggleClickHandler = () => {
@@ -49,6 +51,7 @@ class App extends Component {
             value={{
               token: this.state.token,
               userId: this.state.userId,
+              username: this.state.username,
               login: this.login,
               logout: this.logout
             }}
@@ -56,7 +59,7 @@ class App extends Component {
             <MainNavigation
               drawerClickHandler={this.drawerToggleClickHandler}
             />
-            <SideDrawer show={this.state.sideDrawerOpened} />
+            <SideDrawer show={this.state.sideDrawerOpened} click={this.backdropClickHandler}/>
             {backDrop}
             <main className="main-content">
               <Switch>
@@ -74,6 +77,10 @@ class App extends Component {
                 {this.state.token && (
                   <Route path="/attempts" component={AttemptsPage} />
                 )}
+                {!this.state.token && (
+                  <Route path="/form/:surveyId" component={FormPage} />
+                )}
+                <Redirect from="*" to="/auth" />}
               </Switch>
             </main>
           </AuthContext.Provider>

@@ -15,3 +15,15 @@
     align-items: center;
     justify-content: center;
 }
+
+.details__modal {
+    display: flex;
+    justify-content: space-between;
+}
+
+.details__modal-info,
+.details__modal-stats,
+.question__list {
+    margin: 0 16px;
+    min-width: 125px;
+}

@@ -5,7 +5,8 @@ import './Auth.css';
 
 class AuthPage extends Component {
     state = {
-        isSignIn: true
+        isSignIn: true,
+        error: null
     };
     
     static contextType = AuthContext;
@@ -45,6 +46,7 @@ class AuthPage extends Component {
                     login(email: "${email}", password: "${password}") {
                         userId
                         token
+                        username
                         tokenExpiration
                     }
                 }
@@ -73,16 +75,17 @@ class AuthPage extends Component {
         })
         .then(res => {
             if (res.status !== 200 && res.status !== 201) {
-                throw new Error('Failed!');
+                throw new Error('Incorrect email or password!');
             }
             return res.json();
         })
         .then(resData => {
             if (resData.data.login.token) {
-                this.context.login(resData.data.login.token, resData.data.login.userId, resData.data.login.tokenExpiration);
+                this.context.login(resData.data.login.token, resData.data.login.userId, resData.data.login.username, resData.data.login.tokenExpiration);
             }
         })
         .catch(err => {
+            this.setState({error: 'Incorrect email or password!'});
             console.log(err);
         });
     };
@@ -116,6 +119,7 @@ class AuthPage extends Component {
                         {this.state.isSignIn ? `Create an account` : `Sign In`}
                     </span>
                 </p>
+                {this.state.error && <p className="auth__error"> {this.state.error} </p>}
             </form>
         );
     }
