@@ -4,7 +4,7 @@ module.exports = buildSchema(`
 type Attempt {
     _id: ID!
     survey: Survey!
-    user: User!
+    user: String
     createdAt: String!
     updatedAt: String
     answers: [String!]

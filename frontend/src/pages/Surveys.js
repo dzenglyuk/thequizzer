@@ -15,7 +15,8 @@ class SurveysPage extends Component {
     values: [""],
     types: ["bool"],
     isLoading: false,
-    selectedSurvey: null
+    selectedSurvey: null,
+    copied: false
   };
 
   static contextType = AuthContext;
@@ -61,7 +62,7 @@ class SurveysPage extends Component {
       body: JSON.stringify(requestBody),
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + token
+        "Authorization": "Bearer " + token
       }
     })
       .then(res => {
@@ -119,13 +120,13 @@ class SurveysPage extends Component {
     };
 
     const token = this.context.token;
-
+    console.log(requestBody);
     fetch("http://localhost:8000/graphql", {
       method: "POST",
       body: JSON.stringify(requestBody),
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + token
+        "Authorization": "Bearer " + token
       }
     })
       .then(res => {
@@ -192,6 +193,13 @@ class SurveysPage extends Component {
       const selectedSurvey = state.surveys.find(s => s._id === surveyId);
       return { selectedSurvey: selectedSurvey };
     });
+  };
+
+  shareLinkHandler = () => {
+    this.setState({copied: true});
+    setTimeout(() => {
+      this.setState({copied: false});  
+    },1000);
   };
 
   render() {
@@ -284,8 +292,10 @@ class SurveysPage extends Component {
             canCancel
             canConfirm
             onCancel={this.modalCancelHandler}
-            onConfirm={this.shareLinkHandler}
+            onCopy={this.shareLinkHandler}
+            copyValue={`http://localhost:3000/form/${this.state.selectedSurvey._id}`}
             confirmText="Share"
+            copied={this.state.copied}
           >
             <div className="details__modal">
               <div className="details__modal-info">
@@ -303,11 +313,11 @@ class SurveysPage extends Component {
                 {/* {console.log(this.state.selectedSurvey)} */}
                 {this.state.selectedSurvey.questions.map((q, idx) => <li key={idx}> {q.questionValue} </li>)}
               </ol>
-            </div>  
+            </div>
           </Modal>
         )}
         <div className="surveys__header">
-          <h1> My Surveys </h1>
+          <h1> Surveys </h1>
           {this.state.surveys.length !== 0 && createBtn}
         </div>
         {this.state.isLoading ? (

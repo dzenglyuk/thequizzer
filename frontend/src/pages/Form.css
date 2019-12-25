@@ -1,0 +1,21 @@
+.form__container {
+    width: 40rem;
+    max-width: 80%;
+    margin: 5rem auto;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    background: #FFFFFF;
+}
+
+.no-survey {
+    text-align: center;
+}
+
+.form__title {
+    margin: 0;
+}
+
+.submit-form {
+    padding-top: 2rem;
+}

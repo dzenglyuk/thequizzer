@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 import "./SurveyItem.css";
 
 const SurveyItem = props => (
@@ -14,7 +14,7 @@ const SurveyItem = props => (
         View Details
       </button>
       {props.userId !== props.author._id && (
-        <button className="btn">Make Attempt</button>
+        <Link to={`/form/${props.surveyId}`} className="btn">Make Attempt</Link>
       )}
     </div>
   </li>

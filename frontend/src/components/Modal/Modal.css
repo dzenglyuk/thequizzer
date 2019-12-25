@@ -43,6 +43,11 @@
   padding: 1rem;
 }
 
+.copied__message {
+    display: flex;
+    align-items: center;
+}
+
 @media (min-width: 768px) {
   .modal {
     width: 50rem;

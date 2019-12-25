@@ -77,9 +77,7 @@ class App extends Component {
                 {this.state.token && (
                   <Route path="/attempts" component={AttemptsPage} />
                 )}
-                {!this.state.token && (
-                  <Route path="/form/:surveyId" component={FormPage} />
-                )}
+                <Route path="/form/:surveyId" component={FormPage} />
                 <Redirect from="*" to="/auth" />}
               </Switch>
             </main>

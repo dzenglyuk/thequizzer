@@ -1,0 +1,23 @@
+.attempt {
+    width: 40rem;
+    max-width: 90%;
+    margin: 1rem auto;
+    padding: 20px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2), 0 2px 2px 0 rgba(0, 0, 0, 0.24);
+    background: #FFFFFF;
+    list-style: none;     
+}
+
+.attempt-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.attempt-info__name h1 {
+    color: #4CAF50;
+}
+
+.attempt-info__name h3 {
+    margin-top: 0;
+}

@@ -30,7 +30,7 @@ module.exports = {
         throw new Error('Unauthenticated');
     }
     let questions = [];
-    for (let i = 0; i < args.questionInput.values.length - 1; i++) {
+    for (let i = 0; i < args.questionInput.values.length; i++) {
       questions = [...questions, {questionValue: args.questionInput.values[i], questionType: args.questionInput.types[i]}];
     }
     const survey = new Survey({

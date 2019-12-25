@@ -1,4 +1,5 @@
 const Attempt = require("../../models/attempt");
+const User = require("../../models/user");
 const Survey = require("../../models/survey");
 const { transformAttempt } = require("./merge");
 
@@ -17,19 +18,20 @@ module.exports = {
     }
   },
   makeAttempt: async (args, req) => {
-    const fetchedSurvey = await Survey.findOne({
-      _id: args.attemptInput.survey
-    });
-    if (!fetchedSurvey) {
-      throw new Error("No such survey");
-    }
-    const attempt = new Attempt({
-      user: req.userId | 'Anonymous',
-      survey: fetchedSurvey,
-      answers: args.attemptInput.answers
-    });
-    let createdAttempt;
     try {
+      const fetchedSurvey = await Survey.findOne({
+        _id: args.attemptInput.survey
+      });
+      if (!fetchedSurvey) {
+        throw new Error("No such survey");
+      }
+      const user = await User.findById(req.userId);
+      const attempt = new Attempt({
+        // user: user || 'Anonymous',
+        survey: fetchedSurvey,
+        answers: args.attemptInput.answers
+      });
+      let createdAttempt;
       const result = await attempt.save();
       createdAttempt = transformAttempt(result);
 
