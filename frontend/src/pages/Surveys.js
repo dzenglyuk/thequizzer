@@ -2,15 +2,18 @@ import React, { Component } from "react";
 
 import Modal from "../components/Modal/Modal";
 import BackDrop from "../components/Backdrop/Backdrop";
+import AuthContext from "../context/auth-context"; 
 import "./Surveys.css";
 
 class SurveysPage extends Component {
   state = {
     creating: false,
     questionsNumber: 1,
-    values: [''],
-    types: ['bool']
+    values: [""],
+    types: ["bool"]
   };
+
+  static contextType = AuthContext;
 
   constructor(props) {
     super(props);
@@ -21,22 +24,58 @@ class SurveysPage extends Component {
   startCreateSurveyHandler = () => {
     this.setState({creating: true});
   };
+  
+  transformValues = arr => {
+    return arr.map(a => `"${a}"`);
+  }; 
 
   modalConfirmHandler = () => {
     this.setState({creating: false});
     const title = this.titleElRef.current.value;
     const description = this.descriptionElRef.current.value;
-    let questions = [];
-    for (let idx in this.state.values) {
-      questions[idx] = {questionValue: this.state.values, questionType: this.state.types[idx]};
-    }
+    // let questions = [];
+    // for (let idx in this.state.values) {
+    //   questions[idx] = {questionValue: this.state.values[idx], questionType: this.state.types[idx]};
+    // }
         
-    if (title.trim().length === 0 || description.trim().length === 0 || questions.length === 0) {
+    if (title.trim().length === 0 || description.trim().length === 0) {
       return;
     }
 
-    const survey = {title, description, questions};
-    console.log(survey);
+    const requestBody = {
+          query: `
+              mutation {
+                  createSurvey(surveyInput: {title: "${title}", description: "${description}"},
+                    questionInput: {values: [${this.transformValues(this.state.values)}], types: [${this.transformValues(this.state.types)}]}) {
+                      _id
+                      
+                  }
+              }
+          `
+    };
+
+  const token = this.context.token;
+    console.log(requestBody);
+    fetch('http://localhost:8000/graphql', {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+      }
+  })
+  .then(res => {
+      if (res.status !== 200 && res.status !== 201) {
+          throw new Error('Failed!');
+      }
+      return res.json();
+  })
+  .then(resData => {
+      console.log(resData);
+  })
+  .catch(err => {
+      console.log(err);
+  });
   };
 
   modalCancelHandler = () => {
@@ -47,7 +86,7 @@ class SurveysPage extends Component {
     this.setState({questionsNumber: Number(event.target.value)});
     let defaultTypes = [];
     for (let i = 0; i < event.target.value; i++) {
-      defaultTypes = [...defaultTypes, this.state.types[i] || 'bool'];
+      defaultTypes = [...defaultTypes, this.state.types[i] || "bool"];
     }
     this.setState({types: defaultTypes});
     this.forceUpdate();
